@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>logos_MVC</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>com.adobe.flexbuilder.project.flexbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>com.adobe.flexbuilder.project.actionscriptnature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>[source path] Flint-src</name>
+			<type>2</type>
+			<location>/Actionscript/Flint/src</location>
+		</link>
+		<link>
+			<name>[source path] minimalcomps-minimalcomps-ea455ee-src</name>
+			<type>2</type>
+			<location>/Actionscript/minimalcomps-minimalcomps-ea455ee/src</location>
+		</link>
+		<link>
+			<name>[source path] movieMonitor</name>
+			<type>2</type>
+			<location>/Actionscript/movieMonitor</location>
+		</link>
+	</linkedResources>
+</projectDescription>
