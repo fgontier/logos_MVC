@@ -213,9 +213,7 @@ package org.logosMVC.mvc
 				case "display":
 					myCoca_Cola.setDisplay();
 					myMac_Donalds.setDisplay();
-					myAppleMickeyMarlboroNike.setDisplay();
-					reviveCoca_Cola_Mac_DonaldsAfterModelChange();
-					reviveOther_LogosAfterModelChange();					
+					myAppleMickeyMarlboroNike.setDisplay();					
 					break;				
 			}			
 				
