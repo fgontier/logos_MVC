@@ -109,7 +109,9 @@ package org.logosMVC.mvc
 			panelApproachNeighbours = new PanelApproachNeighbours();
 			panelApproachNeighbours.x = 875;
 			panelApproachNeighbours.y = 416;
-			addChild(panelApproachNeighbours);			
+			addChild(panelApproachNeighbours);	
+			
+			
 		}	
 		
 		

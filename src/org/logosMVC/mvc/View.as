@@ -174,14 +174,19 @@ package org.logosMVC.mvc
 				case "approch":
 					myAppleMickeyMarlboroNike.setApproch();
 					reviveOther_LogosAfterModelChange();
-					break;				
-				case "scale":					
+					break;			
+				case "scale_Coca_Cola":					
 					myCoca_Cola.setScale();
-					myMac_Donalds.setScale();
-					myAppleMickeyMarlboroNike.setScale();					
-					reviveCoca_Cola_Mac_DonaldsAfterModelChange();
-					reviveOther_LogosAfterModelChange();					
+					myCoca_Cola.emitterCoca_Cola.particles[0].revive();					
 					break;				
+				case "scale_Mac_Donalds":
+					myMac_Donalds.setScale();
+					myMac_Donalds.emitterMac_Donalds.particles[0].revive();
+					break;
+				case "scale_Other_Logos":
+					myAppleMickeyMarlboroNike.setScale();					
+					reviveOther_LogosAfterModelChange();					
+					break;							
 				case "lifetime":					
 					myCoca_Cola.setLifetime();
 					myMac_Donalds.setLifetime();

@@ -45,22 +45,26 @@ package org.logosMVC.mvc
 		{
 			switch(event.target.name){  
 				case "scaleStart_Coca_Cola":
-					model.scaleStartCoca_Cola = event.target.value; 
+					model.scaleStartCoca_Cola = event.target.value;
+					model.currentUpdatedPanel = "scale_Coca_Cola";
 					break;
 				case "scaleStart_Mac_Donalds":
 					model.scaleStartMac_Donalds = event.target.value;
+					model.currentUpdatedPanel = "scale_Mac_Donalds";
 					break;
 				case "scaleEnd_Mac_Donalds":
 					model.scaleEndMac_Donalds = event.target.value;
+					model.currentUpdatedPanel = "scale_Mac_Donalds";
 					break;				
 				case "scaleStart_Other_Logos":
 					model.scaleStartOther_Logos = event.target.value;
+					model.currentUpdatedPanel = "scale_Other_Logos";					
 					break;
 				case "scaleEnd_Other_Logos":
 					model.scaleEndOther_Logos = event.target.value;
+					model.currentUpdatedPanel = "scale_Other_Logos";					
 					break;				
 			}
-			model.currentUpdatedPanel = "scale";
 			model.dispatchEvent(new Event(Event.CHANGE));			
 		}
 		
