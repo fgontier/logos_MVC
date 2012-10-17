@@ -110,14 +110,44 @@ package org.logosMVC.mvc
 		// save lifetime to model
 		public function passLifetimeEventToController(event:Event):void
 		{
-			model.minLifetime = event.currentTarget.lowValue;
-			model.maxLifetime = event.currentTarget.highValue;
+			model.lifeTime.minLifetime = event.currentTarget.lowValue;
+			model.lifeTime.maxLifetime = event.currentTarget.highValue;
 			model.currentUpdatedPanel = "lifetime";
 			model.dispatchEvent(new Event(Event.CHANGE));			
 		}
 		// save colorMode to model
 		public function passColorEventToController(event:Event):void
-		{	
+		{
+			switch(event.currentTarget.colorMode){
+				case "Black":
+				model.colorRandomInit4Logos .minColor = 0x000000;
+				model.colorRandomInit4Logos.maxColor = 0x000000;
+				model.particleApple.color = 0x000000;
+				model.particleMickey.color = 0x000000;
+				model.particleMarlboro.color = 0x000000;
+				model.particleNike.color = 0x000000;
+				model.colorMode = "Black";
+				break;
+				case "Color":
+				model.colorRandomInit4Logos.minColor  = 0xFF0000;
+				model.colorRandomInit4Logos.maxColor  = 0x0000FF;
+				//model.myColorRandomInit.minColor  = 0x0000FF; // see ColorInit class for code change minColor/minColor					
+				model.particleApple.color = Math.random() * 0xFFFFFF;
+				model.particleMickey.color = Math.random() * 0xFFFFFF;
+				model.particleMarlboro.color = Math.random() * 0xFFFFFF;
+				model.particleNike.color = Math.random() * 0xFFFFFF;
+				model.colorMode = "Color";
+				break;	
+				case "Cut Out":	
+				model.colorRandomInit4Logos.minColor = 0xFFFFFF;
+				model.colorRandomInit4Logos.maxColor = 0xFFFFFF;
+				model.particleApple.color = 0xFFFFFF;
+				model.particleMickey.color = 0xFFFFFF;
+				model.particleMarlboro.color = 0xFFFFFF;
+				model.particleNike.color = 0xFFFFFF;
+				model.colorMode = "Cut Out";
+				break;
+			}		
 			model.colorMode = event.currentTarget.colorMode;
 			model.currentUpdatedPanel = "colorMode";
 			model.dispatchEvent(new Event(Event.CHANGE));

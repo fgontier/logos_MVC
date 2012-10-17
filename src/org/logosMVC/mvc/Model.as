@@ -4,20 +4,34 @@ package org.logosMVC.mvc
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	
+	import org.flintparticles.common.initializers.ColorRandomInit;
+	import org.flintparticles.common.initializers.Lifetime;
 	import org.flintparticles.twoD.particles.Particle2D;
 	
 	public class Model extends EventDispatcher
 	{
+		
+		// particles
+//		public var particleCoca_Cola:Particle2D;
+		public var particleApple:Particle2D
+		public var particleMickey:Particle2D = new Particle2D();
+		public var particleMarlboro:Particle2D = new Particle2D();
+		public var particleNike:Particle2D = new Particle2D();
+		
 		// lifetime
-		public var minLifetime:Number = 5;
+		public var lifeTime:Lifetime;
+		public var minLifetime:Number = 1;
 		public var maxLifetime:Number = 15;
 		
+
 		// velocity
 		public var minVelocity:Number = 0;
 		public var maxVelocity:Number = 0;
 		
 		// color
 		public var colorMode:String  = "black";  // TODO call this value in colorPanel by default
+		//public var myColorRandomInit:ColorRandomInit = new ColorRandomInit();
+		public var colorRandomInit4Logos:ColorRandomInit = new ColorRandomInit();
 		
 		// rotation
 		public var minRotation:Number = 0;
@@ -46,6 +60,13 @@ package org.logosMVC.mvc
 		
 		public function Model()
 		{
+			lifeTime = new Lifetime(minLifetime, maxLifetime);
+
+			
+			//particleApple.dictionary["name"] = "Apple";	
+			particleMickey.dictionary["name"] = "Mickey";	
+			particleMarlboro.dictionary["name"] = "Marlboro";	
+			particleNike.dictionary["name"] = "Nike";	
 			
 		}
 		

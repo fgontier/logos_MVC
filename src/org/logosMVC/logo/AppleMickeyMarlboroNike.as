@@ -22,10 +22,17 @@ package org.logosMVC.logo
 	public class AppleMickeyMarlboroNike extends Sprite
 	{
 		private var model:Model;
+		public var myParticles:Vector.<Particle>;
+		
 		TweenPlugin.activate([ShortRotationPlugin]);
 		
+		public var myParticleApple:Particle2D;
+		public var myParticleMickey:Particle2D;
+		public var myParticleMarlboro:Particle2D;
+		public var myParticleNike:Particle2D;
+		
 		public var myLifetime:Lifetime;
-		public var myColorInit:ColorRandomInit;
+		public var myColorRandomInit:ColorRandomInit;
 		public var myRotateVelocity:RotateVelocity;		
 		public var myScaleAll:ScaleAll;
 		public var myApproch:ApproachNeighbours;
@@ -61,13 +68,16 @@ package org.logosMVC.logo
 			renderer.addEmitter(emitter);
 
 			myLifetime = new Lifetime(model.minLifetime, model.maxLifetime);
-			myColorInit = new ColorRandomInit(0x000000, 0x000000);
+			//myColorRandomInit = new ColorRandomInit(0x000000, 0x000000);
+			//myColorRandomInit = new ColorRandomInit (model.myColorRandomInit.minColor, model.myColorRandomInit.maxColor);
 			myRotateVelocity = new RotateVelocity(model.minRotation, model.maxRotation);
 			myScaleAll = new ScaleAll(model.scaleStartOther_Logos, model.scaleEndOther_Logos);
 			myApproch = new ApproachNeighbours(model.approchMaxDistance, model.approchAcceleration);
 			
 			emitter.addInitializer( myLifetime);
-			emitter.addInitializer( myColorInit );
+			//emitter.addInitializer( myColorRandomInit );
+			emitter.addInitializer( model.colorRandomInit4Logos );
+
 			emitter.addInitializer( myRotateVelocity );
 			
 			emitter.addAction( new Move() );
@@ -80,7 +90,7 @@ package org.logosMVC.logo
 			emitter.addAction( myScaleAll );
 			emitter.addAction( new WrapAroundBox(0, 0, 1024, 768));			
 				
-			var myParticles:Vector.<Particle> = Particle2DUtils.createParticles2DFromDisplayObjects( myArray );		
+			myParticles = Particle2DUtils.createParticles2DFromDisplayObjects( myArray );		
 			emitter.addParticles( myParticles , true);
 
 			// Dictionary:
@@ -88,6 +98,14 @@ package org.logosMVC.logo
 			emitter.particles[1].dictionary["name"] = "Mickey";
 			emitter.particles[2].dictionary["name"] = "Marlboro";
 			emitter.particles[3].dictionary["name"] = "Nike";
+					
+			myParticleApple = Particle2D(emitter.particles[0]);		// TODO try model.particleApple = Particle2D(emitter.particles[0])
+			myParticleMickey = Particle2D(emitter.particles[1]);
+			myParticleMarlboro = Particle2D(emitter.particles[2]);
+			myParticleNike = Particle2D(emitter.particles[3]);
+			
+			model.particleApple = Particle2D(myParticles[0])	// JUST CHANGED THIS TO TEST AND IT SEAMS TO WORK
+			// STILL NEED "myParticleApple" TO CHANGE THE PARTICLE COLOR ON PANEL CHANGE
 			
 			emitter.start();
 
@@ -95,7 +113,7 @@ package org.logosMVC.logo
 		
 		public function setApproch():void
 		{
-			myApproch.maxDistance = model.approchMaxDistance;  trace ("myApproch.maxDistance " +myApproch.maxDistance + " myApproch.acceleration " +myApproch.acceleration)
+			myApproch.maxDistance = model.approchMaxDistance;  //trace ("myApproch.maxDistance " +myApproch.maxDistance + " myApproch.acceleration " +myApproch.acceleration)
 			myApproch.acceleration = model.approchAcceleration;
 		}
 		
@@ -112,26 +130,46 @@ package org.logosMVC.logo
 		
 		public function setColor():void
 		{
-			switch(model.colorMode){
+/*			switch(model.colorMode){
 				case "Black":
-					myColorInit.minColor = 0x000000;
-					myColorInit.maxColor = 0x000000;
+					myColorRandomInit.minColor = 0x000000;
+					myColorRandomInit.maxColor = 0x000000;
+					for each (var particle:Particle2D in myParticles) {
+						particle.color = 0x000000;
+						model.updatedParticle = particle;
+					}					
 					break;
 				case "Color":
-					myColorInit.minColor  = 0xFF0000;
-					myColorInit.minColor  = 0x0000FF;
+					myColorRandomInit.minColor  = 0xFF0000;
+					myColorRandomInit.minColor  = 0x0000FF; // see ColorInit class for code change minColor/minColor					
+					for each (var particle:Particle2D in myParticles) {
+						particle.color = Math.random() * 0xFFFFFF;
+						model.updatedParticle = particle;
+
+					}					
 					break;	
 				case "Cut Out":	
-					myColorInit.minColor = 0xFFFFFF;
-					myColorInit.maxColor = 0xFFFFFF;
+					myColorRandomInit.minColor = 0xFFFFFF;
+					myColorRandomInit.maxColor = 0xFFFFFF;
+					for each (var particle:Particle2D in myParticles) {
+						particle.color = 0xFFFFFF;
+						model.updatedParticle = particle;
+
+					}					
 					break;				
-			}			
+			}*/
+			//model.particleApple.color = myColorInit.color;  
+			///myParticles[0].color = myColorRandomInit.color;  
+			//myParticles[1].color = myColorRandomInit.color; trace (myColorRandomInit.color)
+			
+			//myParticles[0].color = model.particleApple.color;
 		}
 		
 		public function setLifetime():void
 		{
 			myLifetime.minLifetime = model.minLifetime;
 			myLifetime.maxLifetime = model.maxLifetime;
+
 		}
 		
 		public function setRotation():void

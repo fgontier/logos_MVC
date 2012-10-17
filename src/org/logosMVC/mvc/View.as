@@ -13,6 +13,7 @@ package org.logosMVC.mvc
 	import org.logosMVC.logo.AppleMickeyMarlboroNike;
 	import org.logosMVC.logo.CocaCola;
 	import org.logosMVC.logo.MacDonalds;
+
 	
 	public class View extends Sprite
 	{
@@ -36,6 +37,7 @@ package org.logosMVC.mvc
 			myCoca_Cola = new CocaCola(model);
 			myCoca_Cola.emitterCoca_Cola.addEventListener( ParticleEvent.PARTICLE_DEAD, revivedParticle );			
 			addChild(myCoca_Cola);
+			
 			myMac_Donalds = new MacDonalds(model);
 			myMac_Donalds.emitterMac_Donalds.addEventListener( ParticleEvent.PARTICLE_DEAD, revivedParticle );			
 			addChild(myMac_Donalds);			
@@ -46,8 +48,8 @@ package org.logosMVC.mvc
 			viewPanel = new ViewPanel(model);
 			
 			// approch neighbours panel
-			viewPanel.panelApproachNeighbours.approchAcceleration.addEventListener(Event.CHANGE, approchChangeHandler);
-			viewPanel.panelApproachNeighbours.approchMaxDistance.addEventListener(Event.CHANGE, approchChangeHandler);
+			//viewPanel.panelApproachNeighbours.approchAcceleration.addEventListener(Event.CHANGE, approchChangeHandler);
+			//viewPanel.panelApproachNeighbours.approchMaxDistance.addEventListener(Event.CHANGE, approchChangeHandler);
 			
 			// scale event
 			viewPanel.panelScaleCoca_Cola.scaleStart.addEventListener(Event.CHANGE, scaleChangeHandler);
@@ -80,9 +82,8 @@ package org.logosMVC.mvc
 		
 		protected function approchChangeHandler(event:Event):void
 		{
-			controller.passApprochEventToController(event); //save approch  to controller
+			controller.passApprochEventToController(event); //save approch to controller
 		}
-		
 		
 		protected function scaleChangeHandler(event:Event):void
 		{
@@ -127,10 +128,14 @@ package org.logosMVC.mvc
 			event.particle.revive();
 			event.target.addParticle(Particle2D(event.particle), true);
 			updatePanels(Particle2D(event.particle));
+			trace("e " + event.particle)
 		}
 		
 		protected function updatePanels(updatedParticle:Particle2D):void
 		{	
+			trace("updatedParticle.dictionary.name " + updatedParticle)
+			
+			
 			// Get the name of the updated particle and update the panels:
 			switch(updatedParticle.dictionary.name){
 				case "Coca_Cola":
@@ -150,7 +155,7 @@ package org.logosMVC.mvc
 					break;
 				case "Mickey":
 					viewPanel.panelLifetime.labelMickey_lifetime.text = "MICKEY: " + updatedParticle.lifetime.toFixed() + " seconds";
-					viewPanel.panelColor.colorChooser_Mickey.value = updatedParticle.color;
+					viewPanel.panelColor.colorChooser_Mickey.value = updatedParticle.color; 
 					viewPanel.panelRotation.labelMickey_rotation.text = "MICKEY: " + (updatedParticle.angVelocity * 100 ).toFixed();
 					break;
 				case "Marlboro":
@@ -187,19 +192,35 @@ package org.logosMVC.mvc
 					myAppleMickeyMarlboroNike.setScale();					
 					reviveOther_LogosAfterModelChange();					
 					break;							
-				case "lifetime":					
-					myCoca_Cola.setLifetime();
+				case "lifetime":
+					myCoca_Cola.emitterCoca_Cola.particles[0].lifetime = model.lifeTime.lifetime;
+					
+					updatePanels(Particle2D(myCoca_Cola.emitterCoca_Cola.particles[0]))
+
 					myMac_Donalds.setLifetime();
 					myAppleMickeyMarlboroNike.setLifetime();
-					reviveCoca_Cola_Mac_DonaldsAfterModelChange();
+//					myAppleMickeyMarlboroNike.myParticleApple.lifetime = 3
+//					myAppleMickeyMarlboroNike.emitter.update(60)
+//					reviveCoca_Cola_Mac_DonaldsAfterModelChange();
 					reviveOther_LogosAfterModelChange();
 					break;
 				case "colorMode":
-					myCoca_Cola.setColor();
-					myMac_Donalds.setColor();
-					myAppleMickeyMarlboroNike.setColor();
-					reviveCoca_Cola_Mac_DonaldsAfterModelChange();
-					reviveOther_LogosAfterModelChange();
+					//myCoca_Cola.setColor();
+					//myMac_Donalds.setColor();
+					//myAppleMickeyMarlboroNike.setColor();
+					trace(model.particleApple)
+					updatePanels(model.particleApple);
+					updatePanels(model.particleMickey);
+					updatePanels(model.particleMarlboro);
+					updatePanels(model.particleNike);
+
+					myAppleMickeyMarlboroNike.myParticleApple.color = model.particleApple.color;
+					myAppleMickeyMarlboroNike.myParticleMickey.color = model.particleMickey.color;
+					myAppleMickeyMarlboroNike.myParticleMarlboro.color = model.particleMarlboro.color;
+					myAppleMickeyMarlboroNike.myParticleNike.color = model.particleNike.color;
+
+					//reviveCoca_Cola_Mac_DonaldsAfterModelChange();
+					//reviveOther_LogosAfterModelChange();
 					break;
 				case "rotation":
 					myAppleMickeyMarlboroNike.setRotation();
