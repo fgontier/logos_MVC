@@ -30,7 +30,7 @@ package org.logosMVC.panel
 			approchMaxDistance.maximum = 2000;
 			approchMaxDistance.tick = 10;
 			approchMaxDistance.labelPrecision = 0;
-			approchMaxDistance.name = "approch_maxDistance";
+			approchMaxDistance.name = "approach_maxDistance";
 			addChild(approchMaxDistance);
 			
 			// acceleration slider:
@@ -40,7 +40,7 @@ package org.logosMVC.panel
 			approchAcceleration.maximum = 1;
 			approchAcceleration.tick = 0.1;
 			approchAcceleration.labelPrecision = 1;
-			approchAcceleration.name = "approch_acceleration";
+			approchAcceleration.name = "approach_acceleration";
 			addChild(approchAcceleration);
 		}
 	}

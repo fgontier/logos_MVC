@@ -32,24 +32,31 @@ package org.logosMVC.mvc
 			this.controller = controller;
 			
 			model.addEventListener(Event.CHANGE, model_changeHandler);
-			
-			
+					
 			myCoca_Cola = new CocaCola(model);
-			myCoca_Cola.emitterCoca_Cola.addEventListener( ParticleEvent.PARTICLE_DEAD, revivedParticle );			
+			myCoca_Cola.emitter.addEventListener( ParticleEvent.PARTICLE_DEAD, revivedParticle );			
 			addChild(myCoca_Cola);
 			
 			myMac_Donalds = new MacDonalds(model);
-			myMac_Donalds.emitterMac_Donalds.addEventListener( ParticleEvent.PARTICLE_DEAD, revivedParticle );			
-			addChild(myMac_Donalds);			
+			myMac_Donalds.emitter.addEventListener( ParticleEvent.PARTICLE_DEAD, revivedParticle );			
+			addChild(myMac_Donalds);
+			
 			myAppleMickeyMarlboroNike = new AppleMickeyMarlboroNike(model);
 			myAppleMickeyMarlboroNike.emitter.addEventListener( ParticleEvent.PARTICLE_DEAD, revivedParticle );			
 			addChild(myAppleMickeyMarlboroNike);
 			
 			viewPanel = new ViewPanel(model);
+
 			
-			// approch neighbours panel
-			//viewPanel.panelApproachNeighbours.approchAcceleration.addEventListener(Event.CHANGE, approchChangeHandler);
-			//viewPanel.panelApproachNeighbours.approchMaxDistance.addEventListener(Event.CHANGE, approchChangeHandler);
+			// lifetime event
+			viewPanel.panelLifetime.myLifetimeSlider.addEventListener(Event.CHANGE, lifetimeChangeHandler);
+			
+			// fade event
+			viewPanel.panelFade.fadeEnd.addEventListener(Event.CHANGE, fadeChangeHandler);
+			
+			// approach neighbours panel
+			viewPanel.panelApproachNeighbours.approchAcceleration.addEventListener(Event.CHANGE, approachChangeHandler);
+			viewPanel.panelApproachNeighbours.approchMaxDistance.addEventListener(Event.CHANGE, approachChangeHandler);
 			
 			// scale event
 			viewPanel.panelScaleCoca_Cola.scaleStart.addEventListener(Event.CHANGE, scaleChangeHandler);
@@ -64,10 +71,7 @@ package org.logosMVC.mvc
 			// rotation event
 			viewPanel.panelRotation.myRotationSlider.addEventListener(Event.CHANGE, rotationChangeHandler);
 			viewPanel.panelRotation.resetRotationButton.addEventListener(MouseEvent.CLICK, resetRotationHandler);
-			
-			// lifetime event
-			viewPanel.panelLifetime.myLifetimeSlider.addEventListener(Event.CHANGE, lifetimeChangeHandler);
-			
+		
 			// color event
 			viewPanel.panelColor.addEventListener("panelColorEvent", colorChangeHandler);
 			
@@ -80,9 +84,9 @@ package org.logosMVC.mvc
 			
 		}
 		
-		protected function approchChangeHandler(event:Event):void
+		protected function approachChangeHandler(event:Event):void
 		{
-			controller.passApprochEventToController(event); //save approch to controller
+			controller.passApproachEventToController(event); //save approch to controller
 		}
 		
 		protected function scaleChangeHandler(event:Event):void
@@ -119,8 +123,14 @@ package org.logosMVC.mvc
 		{
 			controller.passLifetimeEventToController(event); //save lifetime to controller
 		}
-
 		
+		protected function fadeChangeHandler(event:Event):void
+		{
+			controller.passFadeEventToController(event); //save fade to controller
+		}
+		
+
+				
 		
 		
 		protected function revivedParticle(event:ParticleEvent):void
@@ -128,14 +138,11 @@ package org.logosMVC.mvc
 			event.particle.revive();
 			event.target.addParticle(Particle2D(event.particle), true);
 			updatePanels(Particle2D(event.particle));
-			trace("e " + event.particle)
+			//trace("e " + event.particle)
 		}
 		
 		protected function updatePanels(updatedParticle:Particle2D):void
-		{	
-			trace("updatedParticle.dictionary.name " + updatedParticle)
-			
-			
+		{			
 			// Get the name of the updated particle and update the panels:
 			switch(updatedParticle.dictionary.name){
 				case "Coca_Cola":
@@ -173,92 +180,77 @@ package org.logosMVC.mvc
 		
 		
 		protected function model_changeHandler(event:Event):void
-		{
-			
+		{	
 			switch(model.currentUpdatedPanel){
-				case "approch":
-					myAppleMickeyMarlboroNike.setApproch();
-					reviveOther_LogosAfterModelChange();
-					break;			
-				case "scale_Coca_Cola":					
-					myCoca_Cola.setScale();
-					myCoca_Cola.emitterCoca_Cola.particles[0].revive();					
-					break;				
-				case "scale_Mac_Donalds":
-					myMac_Donalds.setScale();
-					myMac_Donalds.emitterMac_Donalds.particles[0].revive();
-					break;
-				case "scale_Other_Logos":
-					myAppleMickeyMarlboroNike.setScale();					
-					reviveOther_LogosAfterModelChange();					
-					break;							
+				
 				case "lifetime":
-					myCoca_Cola.emitterCoca_Cola.particles[0].lifetime = model.lifeTime.lifetime;
-					
-					updatePanels(Particle2D(myCoca_Cola.emitterCoca_Cola.particles[0]))
-
-					myMac_Donalds.setLifetime();
-					myAppleMickeyMarlboroNike.setLifetime();
-//					myAppleMickeyMarlboroNike.myParticleApple.lifetime = 3
-//					myAppleMickeyMarlboroNike.emitter.update(60)
-//					reviveCoca_Cola_Mac_DonaldsAfterModelChange();
-					reviveOther_LogosAfterModelChange();
+					myCoca_Cola.emitter.particles[0].lifetime = controller.randomLifetime();
+					myMac_Donalds.emitter.particles[0].lifetime = controller.randomLifetime();
+					myAppleMickeyMarlboroNike.emitter.particles[0].lifetime = controller.randomLifetime();
+					myAppleMickeyMarlboroNike.emitter.particles[1].lifetime = controller.randomLifetime();
+					myAppleMickeyMarlboroNike.emitter.particles[2].lifetime = controller.randomLifetime();
+					myAppleMickeyMarlboroNike.emitter.particles[3].lifetime = controller.randomLifetime();
+					// update lifetime panel
+					viewPanel.panelLifetime.labelCoca_Cola_lifetime.text = "COCA COLA: " + myAppleMickeyMarlboroNike.emitter.particles[0].lifetime.toFixed() + " seconds";
+					viewPanel.panelLifetime.labelMac_Donalds_lifetime.text = "MAC DONALDS: " + myMac_Donalds.emitter.particles[0].lifetime.toFixed() + " seconds";
+					viewPanel.panelLifetime.labelApple_lifetime.text = "APPLE: " + myAppleMickeyMarlboroNike.emitter.particles[0].lifetime.toFixed() + " seconds";
+					viewPanel.panelLifetime.labelMickey_lifetime.text = "MICKEY: " + myAppleMickeyMarlboroNike.emitter.particles[1].lifetime.toFixed() + " seconds";
+					viewPanel.panelLifetime.labelMarlboro_lifetime.text = "MARLBORO: " + myAppleMickeyMarlboroNike.emitter.particles[2].lifetime.toFixed() + " seconds";
+					viewPanel.panelLifetime.labelNike_lifetime.text = "NIKE: " + myAppleMickeyMarlboroNike.emitter.particles[3].lifetime.toFixed() + " seconds";
 					break;
+				
 				case "colorMode":
-					//myCoca_Cola.setColor();
-					//myMac_Donalds.setColor();
-					//myAppleMickeyMarlboroNike.setColor();
-					trace(model.particleApple)
-					updatePanels(model.particleApple);
-					updatePanels(model.particleMickey);
-					updatePanels(model.particleMarlboro);
-					updatePanels(model.particleNike);
-
-					myAppleMickeyMarlboroNike.myParticleApple.color = model.particleApple.color;
-					myAppleMickeyMarlboroNike.myParticleMickey.color = model.particleMickey.color;
-					myAppleMickeyMarlboroNike.myParticleMarlboro.color = model.particleMarlboro.color;
-					myAppleMickeyMarlboroNike.myParticleNike.color = model.particleNike.color;
-
-					//reviveCoca_Cola_Mac_DonaldsAfterModelChange();
-					//reviveOther_LogosAfterModelChange();
-					break;
+					myCoca_Cola.emitter.particles[0].color = model.colorCoca_Cola;
+					myMac_Donalds.emitter.particles[0].color = model.colorMac_Donalds;
+					myAppleMickeyMarlboroNike.emitter.particles[0].color = model.colorApple;
+					myAppleMickeyMarlboroNike.emitter.particles[1].color = model.colorMickey;
+					myAppleMickeyMarlboroNike.emitter.particles[2].color = model.colorMarlboro;
+					myAppleMickeyMarlboroNike.emitter.particles[3].color = model.colorNike;					
+					updatePanelsAllParticles();
+					break;	
+				
 				case "rotation":
-					myAppleMickeyMarlboroNike.setRotation();
-					reviveOther_LogosAfterModelChange();
-					break;
+					Particle2D(myAppleMickeyMarlboroNike.emitter.particles[0]).angVelocity = controller.randomRotateVelocity();
+					Particle2D(myAppleMickeyMarlboroNike.emitter.particles[1]).angVelocity = controller.randomRotateVelocity();
+					Particle2D(myAppleMickeyMarlboroNike.emitter.particles[2]).angVelocity = controller.randomRotateVelocity();
+					Particle2D(myAppleMickeyMarlboroNike.emitter.particles[3]).angVelocity = controller.randomRotateVelocity();
+					// update panel rotation
+					viewPanel.panelRotation.labelApple_rotation.text = "APPLE: " + (Particle2D(myAppleMickeyMarlboroNike.emitter.particles[0]).angVelocity * 100 ).toFixed();
+					viewPanel.panelRotation.labelMickey_rotation.text = "MICKEY: " + (Particle2D(myAppleMickeyMarlboroNike.emitter.particles[1]).angVelocity * 100 ).toFixed();
+					viewPanel.panelRotation.labelMarlboro_rotation.text = "MARLBORO: " + (Particle2D(myAppleMickeyMarlboroNike.emitter.particles[2]).angVelocity * 100 ).toFixed();					
+					viewPanel.panelRotation.labelNike_rotation.text = "NIKE: " + (Particle2D(myAppleMickeyMarlboroNike.emitter.particles[3]).angVelocity * 100 ).toFixed();					
+					break;				
+
 				case "reset rotation":
 					myAppleMickeyMarlboroNike.resetRotation();
+					model.rotateVelocity.angVelocity = 0;
 					viewPanel.panelRotation.myRotationSlider.highValue = 0;
 					viewPanel.panelRotation.myRotationSlider.lowValue = 0;
 					break;
+				
 				case "velocity":
-					myCoca_Cola.setVelocity();
-					myMac_Donalds.setVelocity();
-					reviveCoca_Cola_Mac_DonaldsAfterModelChange();
+					Particle2D(myCoca_Cola.emitter.particles[0]).velY = model.lineZoneCoca_Cola.getLocation().y;
+					Particle2D(myMac_Donalds.emitter.particles[0]).velX = model.lineZoneMac_Donalds.getLocation().x;		
+					updatePanels(Particle2D(myCoca_Cola.emitter.particles[0]))
+					updatePanels(Particle2D(myMac_Donalds.emitter.particles[0]))
 					break;
+
 				case "display":
 					myCoca_Cola.setDisplay();
 					myMac_Donalds.setDisplay();
 					myAppleMickeyMarlboroNike.setDisplay();					
 					break;				
-			}			
-				
+			}							
 		}
 		
-		protected function reviveCoca_Cola_Mac_DonaldsAfterModelChange():void
+		protected function updatePanelsAllParticles():void
 		{
-			// revive Coca Cola and Mac donalds particles for instant update
-			myCoca_Cola.emitterCoca_Cola.particles[0].revive();
-			myMac_Donalds.emitterMac_Donalds.particles[0].revive();			
-		}
-		
-		protected function reviveOther_LogosAfterModelChange():void
-		{
-			// revive other logos particles for instant update
-			myAppleMickeyMarlboroNike.emitter.particles[0].revive();
-			myAppleMickeyMarlboroNike.emitter.particles[1].revive();
-			myAppleMickeyMarlboroNike.emitter.particles[2].revive();
-			myAppleMickeyMarlboroNike.emitter.particles[3].revive();			
+			updatePanels(Particle2D(myCoca_Cola.emitter.particles[0]));
+			updatePanels(Particle2D(myMac_Donalds.emitter.particles[0]));
+			updatePanels(Particle2D(myAppleMickeyMarlboroNike.emitter.particles[0]));
+			updatePanels(Particle2D(myAppleMickeyMarlboroNike.emitter.particles[1]));
+			updatePanels(Particle2D(myAppleMickeyMarlboroNike.emitter.particles[2]));
+			updatePanels(Particle2D(myAppleMickeyMarlboroNike.emitter.particles[3]));			
 		}
 	}
 }

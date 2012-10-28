@@ -11,12 +11,13 @@ package org.logosMVC.mvc
 	import org.logosMVC.panel.PanelApproachNeighbours;
 	import org.logosMVC.panel.PanelColor;
 	import org.logosMVC.panel.PanelDisplay;
+	import org.logosMVC.panel.PanelFade;
 	import org.logosMVC.panel.PanelLifetime;
 	import org.logosMVC.panel.PanelRotation;
 	import org.logosMVC.panel.PanelScaleCoca_Cola;
 	import org.logosMVC.panel.PanelScaleMac_Donalds;
-	import org.logosMVC.panel.PanelVelocity;
 	import org.logosMVC.panel.PanelScaleOtherLogos;
+	import org.logosMVC.panel.PanelVelocity;
 	
 	public class ViewPanel extends Sprite
 	{
@@ -30,6 +31,7 @@ package org.logosMVC.mvc
 		public var panelScaleCoca_Cola:PanelScaleCoca_Cola;
 		public var panelScaleMac_Donalds:PanelScaleMac_Donalds;
 		public var panelScaleOther_Logos:PanelScaleOtherLogos;
+		public var panelFade:PanelFade;
 		
 		public function ViewPanel(model:Model)
 		{
@@ -111,6 +113,11 @@ package org.logosMVC.mvc
 			panelApproachNeighbours.y = 416;
 			addChild(panelApproachNeighbours);	
 			
+			////////////////////// scale Fade			
+			panelFade = new PanelFade(model);
+			panelFade.x = 875;
+			panelFade.y = 556;
+			addChild(panelFade);			
 			
 		}	
 		

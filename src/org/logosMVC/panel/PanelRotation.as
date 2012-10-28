@@ -40,8 +40,8 @@ package org.logosMVC.panel
 			
 			// Range slider:
 			myRotationSlider = new HRangeSlider(rotationPanel,14,105);
-			myRotationSlider.minimum = -3;
-			myRotationSlider.maximum = 3;
+			myRotationSlider.minimum = -5;
+			myRotationSlider.maximum = 5;
 			myRotationSlider.highValue = model.minRotation;
 			myRotationSlider.lowValue = model.maxRotation;
 			myRotationSlider.labelPrecision = 0;
