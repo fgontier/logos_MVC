@@ -10,7 +10,8 @@ package org.logosMVC.panel
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	import org.flintparticles.twoD.particles.Particle2D;
+//	import org.flintparticles.twoD.particles.Particle2D;
+	import org.logosMVC.mvc.Model;
 
 	public class PanelColor extends Sprite
 	{
@@ -22,6 +23,10 @@ package org.logosMVC.panel
 		public var colorChooser_Mickey:ColorChooser;
 		public var colorChooser_Marlboro:ColorChooser;
 		public var colorChooser_Nike:ColorChooser;
+		
+		public var radioButtonGreyMode:RadioButton;
+		public var radioButtonColorMode:RadioButton;		
+		public var radioButtonCutOutMode:RadioButton;		
 		
 		public function PanelColor()
 		{
@@ -51,13 +56,13 @@ package org.logosMVC.panel
 		colorChooser_Nike = new ColorChooser(colorPanel, 72, 127, 0x000000);
 		
 		// Radio buttons:
-		var myGreyMode:RadioButton = new RadioButton(colorPanel, 6, 155, "Black", true, radioButtonHandler);
-		var myColorMode:RadioButton = new RadioButton(colorPanel, 48, 155, "Color", false, radioButtonHandler);
-		var myCutOutMode:RadioButton = new RadioButton(colorPanel, 91, 155, "Cut Out", false, radioButtonHandler);
+		radioButtonGreyMode = new RadioButton(colorPanel, 6, 155, "Black", true, radioButtonHandler);
+		radioButtonColorMode = new RadioButton(colorPanel, 48, 155, "Color", false, radioButtonHandler);
+		radioButtonCutOutMode = new RadioButton(colorPanel, 91, 155, "Cut Out", false, radioButtonHandler);
 		}
 
-		public function radioButtonHandler(event:MouseEvent):void
-		{				
+		private function radioButtonHandler(event:MouseEvent):void
+		{	
 			colorMode = event.currentTarget.label;
 			dispatchEvent(new Event("panelColorEvent",true,false))
 		}

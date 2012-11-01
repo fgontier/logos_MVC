@@ -30,9 +30,16 @@ package org.logosMVC.mvc
 		{
 			this.model = model;
 			this.controller = controller;
+
+			
+			////////////////////// ADD EVENT LISTENER TO MODEL  //////////////////////
 			
 			model.addEventListener(Event.CHANGE, model_changeHandler);
-					
+//			model.addEventListener("configEvent", configEventHander);
+
+			
+			////////////////////// CREATE OBJECTS  //////////////////////
+
 			myCoca_Cola = new CocaCola(model);
 			myCoca_Cola.emitter.addEventListener( ParticleEvent.PARTICLE_DEAD, revivedParticle );			
 			addChild(myCoca_Cola);
@@ -47,6 +54,8 @@ package org.logosMVC.mvc
 			
 			viewPanel = new ViewPanel(model);
 
+			
+			////////////////////// ADD EVENT LISTENER TO PANELS  //////////////////////
 			
 			// lifetime event
 			viewPanel.panelLifetime.myLifetimeSlider.addEventListener(Event.CHANGE, lifetimeChangeHandler);
@@ -80,10 +89,12 @@ package org.logosMVC.mvc
 			viewPanel.panelDisplay.checkboxMac_Donalds_display.addEventListener(MouseEvent.CLICK, displayHandler);
 			viewPanel.panelDisplay.checkboxOther_Logos_display.addEventListener(MouseEvent.CLICK, displayHandler);
 			
-			addChild(viewPanel);
-			
+			addChild(viewPanel);			
 		}
+
 		
+		////////////////////// SAVE EVENTS FROM PANELS TO THE CONTROLLER //////////////////////
+	
 		protected function approachChangeHandler(event:Event):void
 		{
 			controller.passApproachEventToController(event); //save approch to controller
@@ -106,12 +117,12 @@ package org.logosMVC.mvc
 		
 		protected function resetRotationHandler(event:MouseEvent):void
 		{
-			controller.passResetRotationEventToController(event); //save reset color to controller
+			controller.passResetRotationEventToController(event); //save reset rotation to controller
 		}
 		
 		protected function rotationChangeHandler(event:Event):void
 		{
-			controller.passRotationEventToController(event); //save color to controller
+			controller.passRotationEventToController(event); //save rotation to controller
 		}
 				
 		protected function colorChangeHandler(event:Event):void
@@ -128,21 +139,58 @@ package org.logosMVC.mvc
 		{
 			controller.passFadeEventToController(event); //save fade to controller
 		}
-		
 
-				
 		
+		////////////////////// UPDATE PANELS AFTER LOADING SAVED CONFIG FILE //////////////////////
+		
+		protected function configEventHander(event:Event):void
+		{
+			// fucked up way to update the range slider but it works 
+			// can't change both value at the same time because of CHANGE event > remove/add event listener
+			viewPanel.panelLifetime.myLifetimeSlider.removeEventListener(Event.CHANGE, lifetimeChangeHandler);
+			viewPanel.panelLifetime.myLifetimeSlider.lowValue = model.lifeTime.minLifetime;
+			viewPanel.panelLifetime.myLifetimeSlider.addEventListener(Event.CHANGE, lifetimeChangeHandler);
+			viewPanel.panelLifetime.myLifetimeSlider.highValue = model.lifeTime.maxLifetime;
+			
+			// display
+			viewPanel.panelDisplay.checkboxCoca_Cola_display.selected = model.displayCoca_Cola;
+			viewPanel.panelDisplay.checkboxMac_Donalds_display.selected = model.displayMac_Donalds;
+			viewPanel.panelDisplay.checkboxOther_Logos_display.selected = model.displayOther_Logos;
+			myCoca_Cola.setDisplay();
+			myMac_Donalds.setDisplay();
+			myAppleMickeyMarlboroNike.setDisplay();	
+			
+			// color
+			viewPanel.panelColor.radioButtonGreyMode.selected = model.radioButtonGreyMode;
+			viewPanel.panelColor.radioButtonColorMode.selected = model.radioButtonColorMode;
+			viewPanel.panelColor.radioButtonCutOutMode.selected = model.radioButtonCutOutMode;
+			controller.changeColor();
+			
+			// rotation
+			viewPanel.panelRotation.myRotationSlider.removeEventListener(Event.CHANGE, rotationChangeHandler);
+			viewPanel.panelRotation.myRotationSlider.highValue = 5;
+
+			viewPanel.panelRotation.myRotationSlider.lowValue = model.rotateVelocity.minAngVelocity *100;
+			viewPanel.panelRotation.myRotationSlider.addEventListener(Event.CHANGE, rotationChangeHandler);
+			viewPanel.panelRotation.myRotationSlider.highValue = model.rotateVelocity.maxAngVelocity *100;	
+		}
+
+		
+		////////////////////// REVIVE A PARTICLE AFTER IT DIED //////////////////////
 		
 		protected function revivedParticle(event:ParticleEvent):void
 		{	
 			event.particle.revive();
 			event.target.addParticle(Particle2D(event.particle), true);
 			updatePanels(Particle2D(event.particle));
-			//trace("e " + event.particle)
 		}
 		
+		
+		////////////////////// UPDATE PANELS AFTER A PARTICLE IS REVIVED //////////////////////
+
 		protected function updatePanels(updatedParticle:Particle2D):void
-		{			
+		{
+			
 			// Get the name of the updated particle and update the panels:
 			switch(updatedParticle.dictionary.name){
 				case "Coca_Cola":
@@ -177,7 +225,9 @@ package org.logosMVC.mvc
 					break;			
 			}
 		}		
+
 		
+		////////////////////// UPDATE PARTICLES AND PANELS TEXT AFTER CHANGE ON PANEL //////////////////////
 		
 		protected function model_changeHandler(event:Event):void
 		{	
@@ -207,7 +257,7 @@ package org.logosMVC.mvc
 					myAppleMickeyMarlboroNike.emitter.particles[2].color = model.colorMarlboro;
 					myAppleMickeyMarlboroNike.emitter.particles[3].color = model.colorNike;					
 					updatePanelsAllParticles();
-					break;	
+					break;
 				
 				case "rotation":
 					Particle2D(myAppleMickeyMarlboroNike.emitter.particles[0]).angVelocity = controller.randomRotateVelocity();
@@ -222,10 +272,24 @@ package org.logosMVC.mvc
 					break;				
 
 				case "reset rotation":
+					// reset rotation
 					myAppleMickeyMarlboroNike.resetRotation();
-					model.rotateVelocity.angVelocity = 0;
-					viewPanel.panelRotation.myRotationSlider.highValue = 0;
+
+					viewPanel.panelRotation.myRotationSlider.removeEventListener(Event.CHANGE, rotationChangeHandler);
+					viewPanel.panelRotation.myRotationSlider.highValue = 5;
 					viewPanel.panelRotation.myRotationSlider.lowValue = 0;
+					viewPanel.panelRotation.myRotationSlider.highValue = 0;
+					viewPanel.panelRotation.myRotationSlider.addEventListener(Event.CHANGE, rotationChangeHandler);
+					
+					Particle2D(myAppleMickeyMarlboroNike.emitter.particles[0]).angVelocity = 0;
+					Particle2D(myAppleMickeyMarlboroNike.emitter.particles[1]).angVelocity = 0;
+					Particle2D(myAppleMickeyMarlboroNike.emitter.particles[2]).angVelocity = 0;
+					Particle2D(myAppleMickeyMarlboroNike.emitter.particles[3]).angVelocity = 0;
+					// update panel rotation
+					viewPanel.panelRotation.labelApple_rotation.text = "APPLE: " + (Particle2D(myAppleMickeyMarlboroNike.emitter.particles[0]).angVelocity * 100 ).toFixed();
+					viewPanel.panelRotation.labelMickey_rotation.text = "MICKEY: " + (Particle2D(myAppleMickeyMarlboroNike.emitter.particles[1]).angVelocity * 100 ).toFixed();
+					viewPanel.panelRotation.labelMarlboro_rotation.text = "MARLBORO: " + (Particle2D(myAppleMickeyMarlboroNike.emitter.particles[2]).angVelocity * 100 ).toFixed();					
+					viewPanel.panelRotation.labelNike_rotation.text = "NIKE: " + (Particle2D(myAppleMickeyMarlboroNike.emitter.particles[3]).angVelocity * 100 ).toFixed();
 					break;
 				
 				case "velocity":

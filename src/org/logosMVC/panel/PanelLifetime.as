@@ -47,8 +47,8 @@ package org.logosMVC.panel
 			myLifetimeSlider.tag = 1;
 			myLifetimeSlider.minimum = 1;
 			myLifetimeSlider.maximum = 600;
-			myLifetimeSlider.lowValue = model.minLifetime;
-			myLifetimeSlider.highValue = model.maxLifetime;		
+			myLifetimeSlider.lowValue = model.lifeTime.minLifetime;
+			myLifetimeSlider.highValue = model.lifeTime.maxLifetime;		
 			myLifetimeSlider.tick = 1;
 			myLifetimeSlider.labelPrecision = 0;
 			myLifetimeSlider.name = "lifetimeSlider";
