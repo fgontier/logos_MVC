@@ -6,6 +6,7 @@ package org.logosMVC.mvc
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	
 	import org.logosMVC.panel.PanelApproachNeighbours;
@@ -34,6 +35,8 @@ package org.logosMVC.mvc
 		public var panelScaleOther_Logos:PanelScaleOtherLogos;
 		public var panelFade:PanelFade;
 		public var panelSetting:PanelSetting;
+		
+		private var isVisible:Boolean = false;
 		
 		public function ViewPanel(model:Model)
 		{
@@ -132,9 +135,25 @@ package org.logosMVC.mvc
 		protected function onAddedToStage(event:Event):void
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-			stage.addEventListener (Event.MOUSE_LEAVE, leaveHandler); // show/hide the control panel:
+			//stage.addEventListener (Event.MOUSE_LEAVE, leaveHandler); // show/hide the control panel:
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, displayKey);
+
 		}
 		
+		protected function displayKey(event:KeyboardEvent):void
+		{
+			if (event.keyCode == 32 && isVisible == false) {
+				TweenLite.to( this, .5, {autoAlpha:0});
+				isVisible = true;
+			}else{
+				TweenLite.to( this, .5, {autoAlpha:1});
+				isVisible = false;
+			}
+		}
+		
+		
+		/*		
+		// THIS DOESN'T WORK WITH FLASH PROJECTOR
 		protected function leaveHandler(event:Event):void
 		{
 			TweenLite.to( this, .5, {autoAlpha:0});
@@ -146,5 +165,6 @@ package org.logosMVC.mvc
 			TweenLite.to( this, .5, {autoAlpha:1});
 			stage.removeEventListener(MouseEvent.MOUSE_MOVE, returnHandler);
 		}
+*/
 	}
 }

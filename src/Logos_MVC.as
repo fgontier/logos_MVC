@@ -1,6 +1,7 @@
 package
 {
 	import flash.display.Sprite;
+	import flash.display.StageScaleMode;
 	
 	import org.logosMVC.mvc.Controller;
 	import org.logosMVC.mvc.Model;
@@ -13,6 +14,9 @@ package
 		
 		public function Logos_MVC()
 		{
+			stage.scaleMode = StageScaleMode.EXACT_FIT;
+			//stage.scaleMode = StageScaleMode.NO_BORDER
+			
 			var model:Model = new Model();
 			var controller:Controller = new Controller(model);
 			var view:View = new View(model, controller);
