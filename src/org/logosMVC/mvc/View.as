@@ -3,8 +3,6 @@ package org.logosMVC.mvc
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.text.TextField;
-	import flash.text.TextFieldType;
 	
 	import org.flintparticles.common.events.*;
 	import org.flintparticles.common.initializers.Lifetime;
@@ -25,17 +23,26 @@ package org.logosMVC.mvc
 		public var myAppleMickeyMarlboroNike:AppleMickeyMarlboroNike;
 		
 		public var viewPanel:ViewPanel;
-		
+				
 		public function View(model:Model, controller:Controller)
 		{
 			this.model = model;
 			this.controller = controller;
+			addEventListener(Event.ADDED_TO_STAGE, init);
+		}
+		
+		public function init(e:Event):void 
+		{	
+			removeEventListener(Event.ADDED_TO_STAGE, init);
 
+			////////////////////// ADD RESIZE EVENT LISTENER TO STAGE  //////////////////////
+			
+			stage.addEventListener(Event.RESIZE, stage_resizeHandler);
+			
 			
 			////////////////////// ADD EVENT LISTENER TO MODEL  //////////////////////
 			
 			model.addEventListener(Event.CHANGE, model_changeHandler);
-//			model.addEventListener("configEvent", configEventHander);
 
 			
 			////////////////////// CREATE OBJECTS  //////////////////////
@@ -89,9 +96,19 @@ package org.logosMVC.mvc
 			viewPanel.panelDisplay.checkboxMac_Donalds_display.addEventListener(MouseEvent.CLICK, displayHandler);
 			viewPanel.panelDisplay.checkboxOther_Logos_display.addEventListener(MouseEvent.CLICK, displayHandler);
 			
-			addChild(viewPanel);			
+			addChild(viewPanel);
+			
 		}
-
+		
+		protected function stage_resizeHandler(event:Event):void
+		{
+			viewPanel.bgdRight.x = stage.stageWidth - 1024;	// align right the right panel
+			myMac_Donalds.y = stage.stageHeight - 770;		// align bottom the logo Mac Donalds
+			model.wrapAroundBox.right = stage.stageWidth;	// reset the wrap around box right side
+			model.wrapAroundBox.bottom = stage.stageHeight;	// reset the wrap around box bottom side
+			myCoca_Cola.width = stage.stageWidth + 10;		// reset the Coca Cola width + 10 to go to the edge
+			myCoca_Cola.scaleY = myCoca_Cola.scaleX;		// scale the Coca Cola hight proportionaly
+		}
 		
 		////////////////////// SAVE EVENTS FROM PANELS TO THE CONTROLLER //////////////////////
 	

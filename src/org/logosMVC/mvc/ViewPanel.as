@@ -3,7 +3,7 @@ package org.logosMVC.mvc
 	import com.greensock.*;
 	import com.greensock.plugins.*;
 	
-	import flash.display.Shape;
+	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
@@ -21,9 +21,11 @@ package org.logosMVC.mvc
 	import org.logosMVC.panel.PanelSetting;
 	import org.logosMVC.panel.PanelVelocity;
 	
+	
 	public class ViewPanel extends Sprite
 	{
-		
+		public var bgdLeft:MovieClip;
+		public var bgdRight:MovieClip;
 		public var panelLifetime:PanelLifetime;
 		public var panelColor:PanelColor;
 		public var panelRotation:PanelRotation;
@@ -35,7 +37,7 @@ package org.logosMVC.mvc
 		public var panelScaleOther_Logos:PanelScaleOtherLogos;
 		public var panelFade:PanelFade;
 		public var panelSetting:PanelSetting;
-		
+
 		private var isVisible:Boolean = false;
 		
 		public function ViewPanel(model:Model)
@@ -44,7 +46,7 @@ package org.logosMVC.mvc
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			
 			////////////////////// background left		
-			var bgdLeft:Shape = new Shape;
+			bgdLeft = new MovieClip;
 			bgdLeft.graphics.beginFill(0x000000);
 			bgdLeft.graphics.drawRect(0,0,154,768);
 			bgdLeft.graphics.endFill();
@@ -82,7 +84,7 @@ package org.logosMVC.mvc
 			
 			
 			////////////////////// background right		
-			var bgdRight:Shape = new Shape;
+			bgdRight = new MovieClip;
 			bgdRight.graphics.beginFill(0x000000);
 			bgdRight.graphics.drawRect(870,0,154,768);
 			bgdRight.graphics.endFill();
@@ -92,45 +94,44 @@ package org.logosMVC.mvc
 			panelDisplay = new PanelDisplay(model);
 			panelDisplay.x = 875;
 			panelDisplay.y = 4;
-			addChild(panelDisplay);			
+			bgdRight.addChild(panelDisplay);			
 
 			////////////////////// scale Coca Cola			
 			panelScaleCoca_Cola = new PanelScaleCoca_Cola(model);
 			panelScaleCoca_Cola.x = 875;
 			panelScaleCoca_Cola.y = 94;
-			addChild(panelScaleCoca_Cola);
+			bgdRight.addChild(panelScaleCoca_Cola);
 			
 			////////////////////// scale Mac Donalds			
 			panelScaleMac_Donalds = new PanelScaleMac_Donalds(model);
 			panelScaleMac_Donalds.x = 875;
 			panelScaleMac_Donalds.y = 176;
-			addChild(panelScaleMac_Donalds);
+			bgdRight.addChild(panelScaleMac_Donalds);
 			
 			////////////////////// scale Other Logos			
 			panelScaleOther_Logos = new PanelScaleOtherLogos(model);
 			panelScaleOther_Logos.x = 875;
 			panelScaleOther_Logos.y = 296;
-			addChild(panelScaleOther_Logos);
+			bgdRight.addChild(panelScaleOther_Logos);
 			
 			////////////////////// approachNeighbours			
 			panelApproachNeighbours = new PanelApproachNeighbours();
 			panelApproachNeighbours.x = 875;
 			panelApproachNeighbours.y = 416;
-			addChild(panelApproachNeighbours);	
+			bgdRight.addChild(panelApproachNeighbours);	
 			
 			////////////////////// fade			
 			panelFade = new PanelFade(model);
 			panelFade.x = 875;
 			panelFade.y = 556;
-			addChild(panelFade);			
+			bgdRight.addChild(panelFade);			
 			
 			////////////////////// setting			
 			panelSetting = new PanelSetting(model);
 			panelSetting.x = 875;
 			panelSetting.y = 624;
-			addChild(panelSetting);			
+			bgdRight.addChild(panelSetting);
 		}	
-		
 		
 		protected function onAddedToStage(event:Event):void
 		{
