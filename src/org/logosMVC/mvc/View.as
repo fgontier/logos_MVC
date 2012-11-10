@@ -97,10 +97,10 @@ package org.logosMVC.mvc
 			viewPanel.panelDisplay.checkboxOther_Logos_display.addEventListener(MouseEvent.CLICK, displayHandler);
 			
 			addChild(viewPanel);
-			
+			stage_resizeHandler(null);
 		}
 		
-		protected function stage_resizeHandler(event:Event):void
+		public function stage_resizeHandler(event:Event):void
 		{
 			viewPanel.bgdRight.x = stage.stageWidth - 1024;	// align right the right panel
 			myMac_Donalds.y = stage.stageHeight - 770;		// align bottom the logo Mac Donalds
@@ -333,5 +333,7 @@ package org.logosMVC.mvc
 			updatePanels(Particle2D(myAppleMickeyMarlboroNike.emitter.particles[2]));
 			updatePanels(Particle2D(myAppleMickeyMarlboroNike.emitter.particles[3]));			
 		}
+		
+		
 	}
 }
