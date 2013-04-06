@@ -46,7 +46,7 @@ package org.logosMVC.panel
 			myLifetimeSlider = new HRangeSlider(lifetimePanel,14,135);
 			myLifetimeSlider.tag = 1;
 			myLifetimeSlider.minimum = 1;
-			myLifetimeSlider.maximum = 600;
+			myLifetimeSlider.maximum = 600; //86400;
 			myLifetimeSlider.lowValue = model.lifeTime.minLifetime;
 			myLifetimeSlider.highValue = model.lifeTime.maxLifetime;		
 			myLifetimeSlider.tick = 1;
